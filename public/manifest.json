@@ -8,12 +8,12 @@
     "theme_color": "#6a11cb",
     "screenshots": [
       {
-        "src": "assets/images/home-background.jpg",
+        "src": "images/home-background.jpg",
         "sizes": "2560x1600",
         "type": "image/jpg"
       },
       {
-        "src": "assets/images/auth-background.jpg",
+        "src": "images/auth-background.jpg",
         "sizes": "5376x3584",
         "type": "image/jpg"
       }
