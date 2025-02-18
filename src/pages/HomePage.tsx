@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import backgroundImagePath from "../../public/assests/images/home-background.jpg";
+import backgroundImagePath from "/images/home-background.jpg";
 
 const HomePage = () => {
   return (

@@ -5,6 +5,7 @@ import { ThemeProvider, CssBaseline, useMediaQuery } from "@mui/material";
 import App from "./App.tsx";
 import { lightTheme, darkTheme } from "./theme";
 
+// eslint-disable-next-line react-refresh/only-export-components
 const Root = () => {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const theme = useMemo(
