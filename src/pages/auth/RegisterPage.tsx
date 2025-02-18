@@ -14,6 +14,7 @@ const RegisterPage = () => {
       sx={{
         width: "100%",
         height: "100dvh",
+        background: "linear-gradient(135deg, #6a11cb, #2575fc)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

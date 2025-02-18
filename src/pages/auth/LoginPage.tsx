@@ -13,6 +13,7 @@ const LoginPage = () => {
     <Box
       sx={{
         width: "100%",
+        background: "linear-gradient(135deg, #6a11cb, #2575fc)",
         height: "100dvh",
         display: "flex",
         alignItems: "center",
