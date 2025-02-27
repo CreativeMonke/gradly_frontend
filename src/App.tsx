@@ -24,7 +24,6 @@ const App = () => {
         maxWidth={false}
         sx={{
           maxheight: "100dvh",
-
           maxwidth: "100dvw",
         }}
       >
