@@ -3,6 +3,9 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import { AnimatePresence, motion } from "framer-motion";
+import ProtectedRoute from "./components/ProtectedRoute";
+import RedirectIfAuthenticated from "./components/RedirectIfAuthenticated";
+import DashboardPage from "./pages/DashboardPage";
 
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
@@ -15,50 +18,52 @@ const pageVariants = {
 };
 
 const AppRoutes = () => {
-  const location = useLocation(); // ✅ Get the current location
+  const location = useLocation();
 
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}> {/* ✅ Ensure key changes on route change */}
+      <Routes location={location} key={location.pathname}>
+        {/* Public Routes */}
         <Route
           path="/"
           element={
-            <motion.div
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-            >
+            <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
               <HomePage />
             </motion.div>
           }
         />
-        <Route
-          path="/auth/login"
-          element={
-            <motion.div
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-            >
-              <LoginPage />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/auth/register"
-          element={
-            <motion.div
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-            >
-              <RegisterPage />
-            </motion.div>
-          }
-        />
+
+        {/* Redirect logged-in users away from login/register */}
+        <Route element={<RedirectIfAuthenticated />}>
+          <Route
+            path="/auth/login"
+            element={
+              <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                <LoginPage />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/auth/register"
+            element={
+              <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                <RegisterPage />
+              </motion.div>
+            }
+          />
+        </Route>
+
+        {/* Protected Routes (Only accessible when logged in) */}
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/dashboard"
+            element={
+              <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                <DashboardPage />
+              </motion.div>
+            }
+          />
+        </Route>
       </Routes>
     </AnimatePresence>
   );

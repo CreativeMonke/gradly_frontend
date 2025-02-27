@@ -2,7 +2,6 @@ import { Box, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import backgroundImagePath from "/images/home-background.jpg";
 
 const HomePage = () => {
   return (
@@ -20,21 +19,6 @@ const HomePage = () => {
         overflow: "hidden",
       }}
     >
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backgroundImage: `url(${backgroundImagePath})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          filter: "blur(10px)",
-          zIndex: -1,
-        }}
-      />
-
       <Typography
         variant="h4"
         sx={{
