@@ -112,7 +112,7 @@ const DashboardPage = () => {
           <Paper
             sx={{
               width: "100%",
-              height: "40dvh", // Make the parent container have a responsive height
+              height: "100%", // Make the parent container have a responsive height
               padding: "1rem",
             }}
           >
@@ -120,42 +120,47 @@ const DashboardPage = () => {
               {timeframe.charAt(0).toUpperCase() + timeframe.slice(1)} Study
               Progress
             </Typography>
-            <ResponsiveChartContainer
-              // 1) Put axis keys inside each series object
-              series={[
-                {
-                  type: "line",
-                  data: mockData[timeframe].y,
-                  xAxisKey: "x-axis",
-                  yAxisKey: "y-axis",
-                },
-              ]}
-              // 2) Define xAxis (with a matching 'id') for your string categories
-              xAxis={[
-                {
-                  id: "x-axis",
-                  data: mockData[timeframe].x,
-                  scaleType: "band",
-                },
-              ]}
-              // 3) Define yAxis (with a matching 'id') for numeric values
-              yAxis={[
-                {
-                  id: "y-axis",
-                },
-              ]}
-            >
-              <ChartsGrid vertical horizontal />
-              <ChartsTooltip />
-              <LinePlot />
+            <Box sx = {{
+              width: "100%",
+              height: "37dvh",
+            }}>
+              <ResponsiveChartContainer
+                // 1) Put axis keys inside each series object
+                series={[
+                  {
+                    type: "line",
+                    data: mockData[timeframe].y,
+                    xAxisKey: "x-axis",
+                    yAxisKey: "y-axis",
+                  },
+                ]}
+                // 2) Define xAxis (with a matching 'id') for your string categories
+                xAxis={[
+                  {
+                    id: "x-axis",
+                    data: mockData[timeframe].x,
+                    scaleType: "band",
+                  },
+                ]}
+                // 3) Define yAxis (with a matching 'id') for numeric values
+                yAxis={[
+                  {
+                    id: "y-axis",
+                  },
+                ]}
+              >
+                <ChartsGrid vertical horizontal />
+                <ChartsTooltip />
+                <LinePlot />
 
-              {/* <MarkPlot /> adds data markers for the same line series */}
-              <MarkPlot />
+                {/* <MarkPlot /> adds data markers for the same line series */}
+                <MarkPlot />
 
-              {/* Render the axes, referencing the same IDs */}
-              <ChartsXAxis axisId="x-axis" label="Time" position="bottom" />
-              <ChartsYAxis axisId="y-axis" label="Progress" position="left" />
-            </ResponsiveChartContainer>
+                {/* Render the axes, referencing the same IDs */}
+                <ChartsXAxis axisId="x-axis" label="Time" position="bottom" />
+                <ChartsYAxis axisId="y-axis" label="Progress" position="left" />
+              </ResponsiveChartContainer>
+            </Box>
           </Paper>
         </Grid2>
       </Grid2>
