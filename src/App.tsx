@@ -1,10 +1,26 @@
-import { Box, Container } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Container, Grid2, useMediaQuery, useTheme } from "@mui/material";
 import AppRoutes from "./routes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import Toastify styles
+import Sidebar from "./components/Sidebar/Sidebar";
+import Header from "./components/Header/Header";
 import ParticlesBackground from "./background/ParticlesBackground ";
+import { useAuthStore } from "./store/authStore";
 
 const App = () => {
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { checkSession } = useAuthStore();
+
+  const handleToggleMobile = () => setMobileOpen((prev) => !prev);
+  const handleCloseMobile = () => setMobileOpen(false);
+
+  useEffect(() => {
+    checkSession();
+  }, [checkSession]);
+
   return (
     <div>
       <Box
@@ -23,12 +39,40 @@ const App = () => {
         disableGutters
         maxWidth={false}
         sx={{
-          maxheight: "100dvh",
-          maxwidth: "100dvw",
+          maxHeight: "100dvh",
+          maxWidth: "100dvw",
         }}
       >
         <ToastContainer />
-        <AppRoutes />
+        <Grid2
+          container
+          spacing={1}
+          columns={{ xs: 12, md: 12, lg: 16, xl: 20 }}
+          sx={{ height: "100dvh" }}
+        >
+          {!isDesktop && (
+            <Grid2 size={12}>
+              <Header onToggleMobile={handleToggleMobile} />
+            </Grid2>
+          )}
+          {isDesktop && (
+            <Grid2 size={{ md: 3 }} maxWidth={300}>
+              <Sidebar
+                mobileOpen={false}
+                onMobileClose={() => {}}
+                onToggleMobile={handleToggleMobile}
+              />
+            </Grid2>
+          )}
+          <Sidebar
+            mobileOpen={mobileOpen}
+            onMobileClose={handleCloseMobile}
+            onToggleMobile={handleToggleMobile}
+          />
+          <Grid2 size="grow">
+            <AppRoutes />
+          </Grid2>
+        </Grid2>
       </Container>
     </div>
   );

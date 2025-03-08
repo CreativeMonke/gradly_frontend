@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RedirectIfAuthenticated from "./components/RedirectIfAuthenticated";
 import DashboardPage from "./pages/DashboardPage";
+import { SubjectOverviewPage } from "./pages/subjects/SubjectOverviewPage";
 
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
@@ -60,6 +61,16 @@ const AppRoutes = () => {
             element={
               <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
                 <DashboardPage />
+              </motion.div>
+            }
+          />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/subjects"
+            element={
+              <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                <SubjectOverviewPage />
               </motion.div>
             }
           />

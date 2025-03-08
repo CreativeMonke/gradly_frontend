@@ -16,7 +16,7 @@ declare module '@mui/material/styles' {
 // Define custom colors
 const customColors = {
   accent1: '#4CAF50', // Green (complements blue primary)
-  accent2: '#FF9800', // Orange (adds warmth)
+  accent2: '#dc004e', // Orange (adds warmth)
 };
 
 // Function to create a theme based on system mode
@@ -26,9 +26,6 @@ const getTheme = (mode: 'light' | 'dark') =>
       mode, // Auto-switch between light/dark mode
       primary: {
         main: '#1976d2',
-      },
-      secondary: {
-        main: '#dc004e',
       },
       accent1: {
         main: customColors.accent1,

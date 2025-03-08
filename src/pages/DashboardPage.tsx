@@ -120,10 +120,12 @@ const DashboardPage = () => {
               {timeframe.charAt(0).toUpperCase() + timeframe.slice(1)} Study
               Progress
             </Typography>
-            <Box sx = {{
-              width: "100%",
-              height: "37dvh",
-            }}>
+            <Box
+              sx={{
+                width: "100%",
+                height: "37dvh",
+              }}
+            >
               <ResponsiveChartContainer
                 // 1) Put axis keys inside each series object
                 series={[

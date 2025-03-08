@@ -1,12 +1,16 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { validateSession } from "../services/authService";
 
+// Define user and auth state types
 interface User {
-  id: string;
-  name: string;
+  _id: string;
+  lastName: string;
+  firstName: string;
+  birthDate: string;
   email: string;
   avatar?: string;
-  role: 'admin' | 'student';
+  role: "admin" | "student";
 }
 
 interface AuthState {
@@ -15,7 +19,7 @@ interface AuthState {
   isAuthenticated: boolean;
   login: (user: User, token: string) => void;
   logout: () => void;
-  hasRole: (role: 'admin' | 'student') => boolean;
+  checkSession: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -24,17 +28,56 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       isAuthenticated: false,
-      login: (user, token) => {
+
+      login: async (user: User, token: string) => {
         set({ user, token, isAuthenticated: true });
+        localStorage.setItem("token", token);
+
+        // ✅ Fix: Ensure TypeScript recognizes checkSession
+        // await get().checkSession();
       },
+
       logout: () => {
         set({ user: null, token: null, isAuthenticated: false });
+        localStorage.removeItem("token");
       },
-      hasRole: (role) => get().user?.role === role,
+
+      checkSession: async () => {
+        const token = get().token || localStorage.getItem("token");
+        const storedUser = get().user;
+        if (!token || !storedUser) {
+          set({ user: null, token: null, isAuthenticated: false });
+          return;
+        }
+
+        const response = await validateSession(token);
+
+        if (response.status === "success") {
+          const validatedUserId = response.data?.user?.userId;
+          console.log(
+            storedUser._id,
+            "storedUser",
+            validatedUserId,
+            "validatedUserId"
+          );
+
+          if (validatedUserId !== storedUser._id) {
+            console.warn("User ID mismatch. Logging out...");
+            set({ user: null, token: null, isAuthenticated: false });
+            localStorage.removeItem("token");
+          } else {
+            set({ user: storedUser, token, isAuthenticated: true });
+          }
+        } else {
+          console.warn("Session validation failed. Logging out...");
+          set({ user: null, token: null, isAuthenticated: false });
+          localStorage.removeItem("token");
+        }
+      },
     }),
     {
-      name: 'auth-storage',
-      storage: createJSONStorage(() => localStorage), 
+      name: "auth-storage",
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );
