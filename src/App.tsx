@@ -12,7 +12,9 @@ const App = () => {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { checkSession } = useAuthStore();
+  
+  // ✅ Get auth state from Zustand
+  const { checkSession, isAuthenticated } = useAuthStore();
 
   const handleToggleMobile = () => setMobileOpen((prev) => !prev);
   const handleCloseMobile = () => setMobileOpen(false);
@@ -50,12 +52,15 @@ const App = () => {
           columns={{ xs: 12, md: 12, lg: 16, xl: 20 }}
           sx={{ height: "100dvh" }}
         >
-          {!isDesktop && (
+          {/* ✅ Only show header if authenticated */}
+          {isAuthenticated && !isDesktop && (
             <Grid2 size={12}>
               <Header onToggleMobile={handleToggleMobile} />
             </Grid2>
           )}
-          {isDesktop && (
+
+          {/* ✅ Only show sidebar if authenticated */}
+          {isAuthenticated && isDesktop && (
             <Grid2 size={{ md: 3 }} maxWidth={300}>
               <Sidebar
                 mobileOpen={false}
@@ -64,11 +69,17 @@ const App = () => {
               />
             </Grid2>
           )}
-          <Sidebar
-            mobileOpen={mobileOpen}
-            onMobileClose={handleCloseMobile}
-            onToggleMobile={handleToggleMobile}
-          />
+
+          {/* ✅ Mobile Sidebar */}
+          {isAuthenticated && (
+            <Sidebar
+              mobileOpen={mobileOpen}
+              onMobileClose={handleCloseMobile}
+              onToggleMobile={handleToggleMobile}
+            />
+          )}
+
+          {/* ✅ Main Content */}
           <Grid2 size="grow">
             <AppRoutes />
           </Grid2>
