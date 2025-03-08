@@ -25,12 +25,15 @@ import { useAuthStore } from "../../store/authStore"; // Assume Zustand store fo
 interface SidebarProps {
   mobileOpen: boolean;
   onMobileClose: () => void;
+  onToggleMobile: () => void; 
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
   mobileOpen,
   onMobileClose,
+  onToggleMobile,
 }) => {
+  void onToggleMobile;
   const theme = useTheme();
   const navigate = useNavigate();
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
