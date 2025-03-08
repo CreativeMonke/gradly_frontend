@@ -95,7 +95,7 @@ const RegisterPage = () => {
           form.lastName,
           form.email,
           form.password,
-          form.birthdate.toISOString() // ✅ Convert dayjs object to string
+          form.birthdate!.toISOString() // ✅ Convert dayjs object to string
         );
         if (result) {
           navigate("/dashboard");
