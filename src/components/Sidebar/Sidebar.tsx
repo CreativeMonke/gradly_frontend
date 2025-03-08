@@ -25,13 +25,11 @@ import { useAuthStore } from "../../store/authStore"; // Assume Zustand store fo
 interface SidebarProps {
   mobileOpen: boolean;
   onMobileClose: () => void;
-  onToggleMobile: () => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
   mobileOpen,
   onMobileClose,
-  onToggleMobile,
 }) => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -65,6 +63,11 @@ const Sidebar: React.FC<SidebarProps> = ({
           to={!item.nested ? item.path : undefined}
           selected={isActive}
           sx={{
+            backgroundColor: isNestedActive
+              ? "warning" // ✅ Color when nested item is active
+              : isActive
+              ? "primary" // ✅ Color when main item is active
+              : "transparent",
             borderRadius: 1,
           }}
         >
@@ -97,7 +100,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                   sx={{
                     pl: 4,
                     borderRadius: 1,
-
+                     backgroundColor: location.pathname.startsWith(subItem.path)
+                    ? 'primary.main' 
+                    : 'transparent',
                   }}
                 >
                   <ListItemIcon>{subItem.icon}</ListItemIcon>
