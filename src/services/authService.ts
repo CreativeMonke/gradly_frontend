@@ -4,6 +4,41 @@ import { showSuccessToast, showErrorToast } from "../utils/toast";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+export const registerUser = async (
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+  birthdate: string
+) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/auth/register`, {
+      firstName,
+      lastName,
+      email,
+      password,
+      birthdate,
+    });
+
+    const { message, status, data } = response.data;
+
+    if (status === "success") {
+      useAuthStore.getState().login(data.user, data.token);
+      showSuccessToast(message);
+      return data;
+    } else {
+      showErrorToast(message);
+      return null;
+    }
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    const errorMessage =
+      axiosError.response?.data?.message || "Registration failed.";
+    showErrorToast(errorMessage);
+    throw new Error(errorMessage);
+  }
+};
+
 export const loginUser = async (email: string, password: string) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/login`, {

@@ -19,7 +19,7 @@ export const getSubjects = async (userId: string) => {
     });
 
     const { message, status, data } = response.data;
-
+    
     if (status === 'success') {
       showSuccessToast(message);
       return data;

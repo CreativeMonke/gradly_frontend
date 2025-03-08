@@ -1,12 +1,24 @@
 import { useState } from "react";
-import { Box, Button, TextField, Typography, Paper, Divider, CircularProgress, Alert } from "@mui/material";
-import { Apple, Google, Email } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  Divider,
+  CircularProgress,
+  Alert,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
+import { Apple, Google, Email, Visibility, VisibilityOff } from "@mui/icons-material";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../services/authService";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // ✅ State for password visibility
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -17,7 +29,7 @@ const LoginPage = () => {
 
     try {
       await loginUser(email, password);
-      navigate("/dashboard"); // Redirect after successful login
+      navigate("/dashboard"); // ✅ Redirect after successful login
     } catch (err) {
       setError("Invalid email or password.");
       console.log(err);
@@ -46,6 +58,7 @@ const LoginPage = () => {
           borderRadius: "10px",
         }}
       >
+        {/* ✅ Header */}
         <Typography variant="h5" sx={{ marginBottom: 2 }}>
           Sign In
         </Typography>
@@ -53,8 +66,14 @@ const LoginPage = () => {
           <Typography variant="body2">Gradly</Typography>
         </Divider>
 
-        {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+        {/* ✅ Error Alert */}
+        {error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {error}
+          </Alert>
+        )}
 
+        {/* ✅ Email */}
         <TextField
           fullWidth
           label="Email Address"
@@ -63,16 +82,28 @@ const LoginPage = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+
+        {/* ✅ Password with Visibility Toggle */}
         <TextField
           fullWidth
           label="Password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           variant="outlined"
           margin="normal"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
 
+        {/* ✅ Sign In Button */}
         <Button
           variant="contained"
           color="primary"
@@ -88,17 +119,28 @@ const LoginPage = () => {
           {loading ? <CircularProgress size={24} /> : "Sign in with Email"}
         </Button>
 
+        {/* ✅ OR Continue with */}
         <Typography sx={{ marginY: 2, fontSize: "14px", color: "gray" }}>
           or continue with
         </Typography>
 
+        {/* ✅ Google Sign-In */}
         <Button variant="outlined" fullWidth sx={{ marginBottom: 1 }} startIcon={<Google />}>
           Sign in with Google
         </Button>
 
+        {/* ✅ Apple Sign-In */}
         <Button variant="outlined" fullWidth startIcon={<Apple />}>
           Sign in with Apple
         </Button>
+
+        {/* ✅ Already have an account? */}
+        <Typography sx={{ textAlign: "center", mt: 2 }}>
+          Don't have an account?{" "}
+          <Link to="/auth/register" style={{ color: "#6a11cb", textDecoration: "none" }}>
+            Sign up
+          </Link>
+        </Typography>
       </Paper>
     </Box>
   );

@@ -17,6 +17,7 @@ interface AuthState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
+  register: (user: User, token: string) => void;
   login: (user: User, token: string) => void;
   logout: () => void;
   checkSession: () => Promise<void>;
@@ -28,7 +29,10 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       isAuthenticated: false,
-
+      register: (user: User, token: string) => {
+        set({ user, token, isAuthenticated: true });
+        localStorage.setItem("token", token);
+      },
       login: async (user: User, token: string) => {
         set({ user, token, isAuthenticated: true });
         localStorage.setItem("token", token);
@@ -54,13 +58,6 @@ export const useAuthStore = create<AuthState>()(
 
         if (response.status === "success") {
           const validatedUserId = response.data?.user?.userId;
-          console.log(
-            storedUser._id,
-            "storedUser",
-            validatedUserId,
-            "validatedUserId"
-          );
-
           if (validatedUserId !== storedUser._id) {
             console.warn("User ID mismatch. Logging out...");
             set({ user: null, token: null, isAuthenticated: false });
