@@ -48,7 +48,8 @@ const App = () => {
         <ToastContainer />
         <Grid2
           container
-          spacing={1}
+          spacing={0}
+          gap={0}
           columns={{ xs: 12, md: 12, lg: 16, xl: 20 }}
           sx={{ height: "100dvh" }}
         >

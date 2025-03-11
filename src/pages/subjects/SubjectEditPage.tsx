@@ -246,6 +246,7 @@ const SubjectPage = () => {
       <Paper
         sx={{
           height: "100dvh",
+          backgroundColor: "transparent",
           p: 3,
           display: "flex",
           flexDirection: "column",
@@ -261,6 +262,7 @@ const SubjectPage = () => {
       <Paper
         sx={{
           height: "100dvh",
+          backgroundColor: "transparent",
           p: 3,
           display: "flex",
           flexDirection: "column",

@@ -10,6 +10,7 @@ import {
 import {
   Box,
   Breadcrumbs,
+  CircularProgress,
   Grid2,
   Link,
   Paper,
@@ -27,8 +28,16 @@ import { useEffect, useRef, useState } from "react";
 export function SubjectOverviewPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { subjects, fetchSubjects } = useSubjectsStore();
-  const { chapters, fetchChapters } = useChaptersStore();
+  const {
+    subjects,
+    fetchSubjects,
+    error: subjectError,
+  } = useSubjectsStore();
+  const {
+    chapters,
+    fetchChapters,
+    error: chapterError,
+  } = useChaptersStore();
 
   const [loading, setLoading] = useState(true);
   const hasFetchedChapters = useRef(false); // ✅ Cache to avoid redundant fetching
@@ -113,21 +122,40 @@ export function SubjectOverviewPage() {
     console.log("Search value:", value);
   };
 
-  // ✅ Show loading state until data is fetched
-  if (loading) {
+  if (loading)
     return (
-      <Box
+      <Paper
         sx={{
-          minHeight: "100dvh",
+          height: "100dvh",
+          p: 3,
           display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "transparent",
+        }}
+      >
+        <CircularProgress />
+      </Paper>
+    );
+  if (subjectError || chapterError)
+    return (
+      <Paper
+        sx={{
+          height: "100dvh",
+          backgroundColor: "transparent",
+          p: 3,
+          display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <Typography>Loading...</Typography>
-      </Box>
+        <Typography color="error" variant="h3">
+          {subjectError || chapterError}
+        </Typography>
+      </Paper>
     );
-  }
 
   return (
     <Box

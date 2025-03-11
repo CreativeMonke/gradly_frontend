@@ -7,6 +7,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  CircularProgress,
 } from "@mui/material";
 import {
   AttachMoneyRounded,
@@ -61,7 +62,8 @@ export const SubjectsGrid = () => {
     anchorEl: HTMLElement | null;
     subjectId: string | null;
   }>({ anchorEl: null, subjectId: null });
-  const { subjects, fetchSubjects, createSubject, loading, error } = useSubjectsStore();
+  const { subjects, fetchSubjects, createSubject, loading, error } =
+    useSubjectsStore();
   const { user } = useAuthStore();
   const navigate = useNavigate();
   useEffect(() => {
@@ -70,8 +72,41 @@ export const SubjectsGrid = () => {
     }
   }, [user, fetchSubjects]);
 
-  if (loading) return <Typography>Loading...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
+  if (loading)
+    return (
+      <Paper
+        sx={{
+          height: "40vh",
+          backgroundColor: "transparent",
+          borderRadius: 3,
+          p: 3,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <CircularProgress />
+      </Paper>
+    );
+  if (error)
+    return (
+      <Paper
+        sx={{
+          height: "100dvh",
+          backgroundColor: "transparent",
+          p: 3,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography color="error" variant="h3">
+          {error}
+        </Typography>
+      </Paper>
+    );
   function handleSubjectClick(subject: Subject) {
     navigate(`/subjects/${subject._id}`);
   }
@@ -102,7 +137,7 @@ export const SubjectsGrid = () => {
       subjectCategory: subject.subjectCategory,
       isMarketplaceVisible: subject.isMarketplaceVisible,
       isTemplate: subject.isTemplate,
-    })
+    });
     console.log("Duplicating subject", subject.name);
   }
 

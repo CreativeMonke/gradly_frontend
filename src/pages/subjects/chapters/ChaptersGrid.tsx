@@ -10,6 +10,7 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   LinearProgress,
+  CircularProgress,
 } from "@mui/material";
 import {
   AutoAwesomeRounded,
@@ -260,8 +261,41 @@ export function ChaptersGrid() {
       });
   }, [chapters, filterBy, searchBy, sortBy]);
 
-  if (loading) return <Typography>Loading...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
+  if (loading)
+    return (
+      <Paper
+        sx={{
+          height: "40dvh",
+          p: 3,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "transparent",
+        }}
+      >
+        <CircularProgress />
+      </Paper>
+    );
+  if (error)
+    return (
+      <Paper
+        sx={{
+          height: "40dvh",
+          backgroundColor: "transparent",
+          p: 3,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography color="error" variant="h3">
+          {error}
+        </Typography>
+      </Paper>
+    );
+
   return (
     <Paper
       sx={{
@@ -537,18 +571,21 @@ export function ChaptersGrid() {
                             />
                           )}
                         {
-                        //Also, remove the weekday from the date
-                        
-                        chapter.currentProgress > 0 &&
-                        chapter.currentProgress < 100
-                          ? `Progress: ${chapter.currentProgress}%`
-                          : chapter.isCompleted
-                          ? `Completed on ${new Intl.DateTimeFormat("en-GB", {
-                              day: "numeric",
-                              month: "long",
-                              year: "numeric",
-                            }).format(new Date(chapter.completionDate || ""))}`
-                          : "Not learned yet"}
+                          //Also, remove the weekday from the date
+
+                          chapter.currentProgress > 0 &&
+                          chapter.currentProgress < 100
+                            ? `Progress: ${chapter.currentProgress}%`
+                            : chapter.isCompleted
+                            ? `Completed on ${new Intl.DateTimeFormat("en-GB", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                              }).format(
+                                new Date(chapter.completionDate || "")
+                              )}`
+                            : "Not learned yet"
+                        }
                       </Typography>
                     </Paper>
                   </motion.div>
