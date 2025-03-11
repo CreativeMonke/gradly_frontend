@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Paper, Typography, Box, Button, ButtonProps } from "@mui/material";
+import { Paper, Typography, Box, Button, ButtonProps, CircularProgress } from "@mui/material";
 
 interface ActionElementProps {
   icon: ReactNode;
@@ -11,6 +11,7 @@ interface ActionElementProps {
   onButton1Click: () => void;
   button1Variant?: ButtonProps["variant"];
   button1Color?: ButtonProps["color"];
+  button1Loading?: boolean;
 
   // Button 2 props (optional)
   button2Text?: string;
@@ -18,6 +19,7 @@ interface ActionElementProps {
   onButton2Click?: () => void;
   button2Variant?: ButtonProps["variant"];
   button2Color?: ButtonProps["color"];
+  button2Loading?: boolean;
 }
 
 export const ActionElement = ({
@@ -28,11 +30,13 @@ export const ActionElement = ({
   onButton1Click,
   button1Variant = "contained",
   button1Color = "primary",
+  button1Loading = false,
   button2Text,
   button2Icon,
   onButton2Click,
   button2Variant = "outlined",
   button2Color = "secondary",
+  button2Loading = false,
 }: ActionElementProps) => {
   return (
     <Paper
@@ -76,30 +80,34 @@ export const ActionElement = ({
           size="small"
           variant={button1Variant}
           color={button1Color}
-          startIcon={button1Icon}
+          startIcon={!button1Loading ? button1Icon : undefined}
           onClick={onButton1Click}
+          disabled={button1Loading}
           sx={{
             fontSize: 14,
             borderRadius: 2,
+            minWidth: 100,
           }}
         >
-          {button1Text}
+          {button1Loading ? <CircularProgress size={16} color="inherit" /> : button1Text}
         </Button>
 
         {/* Button 2 (Optional) */}
-        {button2Text && onButton2Click && button2Icon && (
+        {button2Text && onButton2Click && (
           <Button
             size="small"
             variant={button2Variant}
             color={button2Color}
-            startIcon={button2Icon}
+            startIcon={!button2Loading ? button2Icon : undefined}
             onClick={onButton2Click}
+            disabled={button2Loading}
             sx={{
               fontSize: 14,
               borderRadius: 2,
+              minWidth: 100,
             }}
           >
-            {button2Text}
+            {button2Loading ? <CircularProgress size={16} color="inherit" /> : button2Text}
           </Button>
         )}
       </Box>

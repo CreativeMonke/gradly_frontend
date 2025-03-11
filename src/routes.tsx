@@ -7,6 +7,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import RedirectIfAuthenticated from "./components/RedirectIfAuthenticated";
 import DashboardPage from "./pages/DashboardPage";
 import { SubjectOverviewPage } from "./pages/subjects/SubjectOverviewPage";
+import CreateSubjectPage from "./pages/subjects/CreateSubjectPage";
+import SubjectPage from "./pages/subjects/SubjectEditPage";
+import { ChaptersOverviewPage } from "./pages/subjects/chapters/ChaptersOverviewPage";
 
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
@@ -71,6 +74,46 @@ const AppRoutes = () => {
             element={
               <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
                 <SubjectOverviewPage />
+              </motion.div>
+            }
+          />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/subjects/create-subject"
+            element={
+              <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                <CreateSubjectPage />
+              </motion.div>
+            }
+          />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/subjects/:subjectId"
+            element={
+              <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                <SubjectPage />
+              </motion.div>
+            }
+          />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/subjects/:subjectId/edit"
+            element={
+              <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                <SubjectPage />
+              </motion.div>
+            }
+          />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/subjects/:subjectId/:chapterId"
+            element={
+              <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                <ChaptersOverviewPage />
               </motion.div>
             }
           />

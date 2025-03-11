@@ -1,9 +1,33 @@
-import { useEffect } from "react";
-import { Paper, Grid2, Typography, Box } from "@mui/material";
-import { BookRounded } from "@mui/icons-material";
-import { useSubjectsStore } from "../../store/subjectsStore";
+import React, { useEffect } from "react";
+import {
+  Paper,
+  Grid2,
+  Typography,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import {
+  AttachMoneyRounded,
+  BookRounded,
+  BrushRounded,
+  CodeRounded,
+  EditLocationRounded,
+  EditRounded,
+  EngineeringRounded,
+  FileCopyRounded,
+  LanguageRounded,
+  MoreVertRounded,
+  PublicRounded,
+  SchoolRounded,
+  ScienceRounded,
+  SportsSoccerRounded,
+} from "@mui/icons-material";
+import { Subject, useSubjectsStore } from "../../store/subjectsStore";
 import { useAuthStore } from "../../store/authStore";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -19,10 +43,27 @@ const itemVariants = {
   exit: { opacity: 0, y: -20, transition: { duration: 0.2 } },
 };
 
-export const SubjectsGrid = () => {
-  const { subjects, fetchSubjects, loading, error } = useSubjectsStore();
-  const { user } = useAuthStore();
+const categoryIconMap: Record<string, React.ReactNode> = {
+  "math-computer-science": <CodeRounded />, // ✅ Mathematics-Computer Science
+  "natural-sciences": <ScienceRounded />, // ✅ Natural Sciences
+  philology: <LanguageRounded />, // ✅ Philology
+  "social-sciences": <PublicRounded />, // ✅ Social Sciences
+  "technical-sciences": <EngineeringRounded />, // ✅ Technical Sciences
+  "natural-resources-environment": <EditLocationRounded />, // ✅ Natural Resources and Environmental Protection
+  "economic-sciences": <AttachMoneyRounded />, // ✅ Economic Sciences
+  arts: <BrushRounded />, // ✅ Arts
+  sports: <SportsSoccerRounded />, // ✅ Sports
+  pedagogy: <SchoolRounded />, // ✅ Pedagogy
+};
 
+export const SubjectsGrid = () => {
+  const [menuAnchor, setMenuAnchor] = React.useState<{
+    anchorEl: HTMLElement | null;
+    subjectId: string | null;
+  }>({ anchorEl: null, subjectId: null });
+  const { subjects, fetchSubjects, createSubject, loading, error } = useSubjectsStore();
+  const { user } = useAuthStore();
+  const navigate = useNavigate();
   useEffect(() => {
     if (user?._id) {
       fetchSubjects(user._id);
@@ -31,7 +72,40 @@ export const SubjectsGrid = () => {
 
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
-  console.log(subjects);
+  function handleSubjectClick(subject: Subject) {
+    navigate(`/subjects/${subject._id}`);
+  }
+
+  function handleActionButtonClick(
+    event: React.MouseEvent<HTMLElement>,
+    subjectId: string
+  ) {
+    event.stopPropagation();
+    setMenuAnchor({ anchorEl: event.currentTarget, subjectId });
+  }
+
+  // ✅ Close menu
+  function handleActionButtonClose() {
+    setMenuAnchor({ anchorEl: null, subjectId: null });
+  }
+
+  function handleEditSubject(subject: Subject) {
+    handleActionButtonClose();
+    navigate(`/subjects/${subject._id}/edit`);
+  }
+
+  async function handleDuplicateSubject(subject: Subject) {
+    handleActionButtonClose();
+    await createSubject({
+      name: subject.name + " (Copy)",
+      description: subject.description,
+      subjectCategory: subject.subjectCategory,
+      isMarketplaceVisible: subject.isMarketplaceVisible,
+      isTemplate: subject.isTemplate,
+    })
+    console.log("Duplicating subject", subject.name);
+  }
+
   return (
     <Paper
       sx={{
@@ -61,6 +135,9 @@ export const SubjectsGrid = () => {
                 >
                   <Paper
                     elevation={12}
+                    onClick={() => {
+                      handleSubjectClick(subject);
+                    }}
                     sx={{
                       minHeight: "25dvh",
                       position: "relative",
@@ -96,7 +173,63 @@ export const SubjectsGrid = () => {
                         transition: "opacity 0.2s ease-in-out",
                       }}
                     >
-                      <BookRounded />
+                      {categoryIconMap[subject.subjectCategory] || (
+                        <BookRounded />
+                      )}
+                    </Box>
+                    {/* Actions menu */}
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: 12,
+                        right: 12,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: "50%",
+                        padding: 0.5,
+                      }}
+                    >
+                      <IconButton
+                        onClick={(event) =>
+                          handleActionButtonClick(event, subject._id)
+                        }
+                      >
+                        <MoreVertRounded />
+                      </IconButton>
+                      <Menu
+                        anchorEl={
+                          menuAnchor.subjectId === subject._id
+                            ? menuAnchor.anchorEl
+                            : null
+                        }
+                        open={
+                          menuAnchor.subjectId === subject._id &&
+                          Boolean(menuAnchor.anchorEl)
+                        }
+                        onClose={handleActionButtonClose}
+                      >
+                        <MenuItem
+                          onClick={(event: React.MouseEvent<HTMLElement>) => {
+                            handleEditSubject(subject);
+                            event.stopPropagation(); // ✅ Stop event propagation
+                          }}
+                          disableRipple
+                        >
+                          <EditRounded sx={{ mr: 1 }} />
+                          Edit
+                        </MenuItem>
+                        <MenuItem
+                          onClick={(event: React.MouseEvent<HTMLElement>) => {
+                            handleDuplicateSubject(subject);
+                            event.stopPropagation(); // ✅ Stop event propagation
+                          }}
+                          disableRipple
+                        >
+                          <FileCopyRounded sx={{ mr: 1 }} />
+                          Duplicate
+                        </MenuItem>
+                      </Menu>
                     </Box>
 
                     {/* Title */}

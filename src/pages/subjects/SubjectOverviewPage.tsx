@@ -15,16 +15,52 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { useLocation, Link as RouterLink } from "react-router-dom";
+import { useLocation, Link as RouterLink, useNavigate } from "react-router-dom";
 import { SingleElement } from "../../components/Elements/SingleElement";
 import { ActionElement } from "../../components/Elements/ActionElement";
 import { SearchElement } from "../../components/Elements/SearchElement";
 import { SubjectsGrid } from "./SubjectsGrid";
+import { useSubjectsStore } from "../../store/subjectsStore";
+import { useChaptersStore } from "../../store/chaptersStore";
+import { useEffect, useRef, useState } from "react";
 
 export function SubjectOverviewPage() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { subjects, fetchSubjects } = useSubjectsStore();
+  const { chapters, fetchChapters } = useChaptersStore();
 
-  const numberOfSubjects = 12; //replace with backend from store
+  const [loading, setLoading] = useState(true);
+  const hasFetchedChapters = useRef(false); // ✅ Cache to avoid redundant fetching
+
+  console.log(subjects, "subjects");
+
+  // ✅ Fetch subjects only if empty
+  useEffect(() => {
+    if (subjects.length === 0) {
+      console.log("Fetching subjects...");
+      fetchSubjects("").finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
+  }, [subjects, fetchSubjects]);
+
+  // ✅ Fetch chapters only when subjects are loaded AND chapters are empty
+  useEffect(() => {
+    if (subjects.length > 0 && !hasFetchedChapters.current) {
+      console.log("Fetching chapters for subject:", subjects[0]._id);
+      fetchChapters({ subjectId: subjects[0]._id });
+      hasFetchedChapters.current = true; // ✅ Avoid multiple reloads
+    }
+  }, [subjects, fetchChapters]);
+
+  const numberOfSubjects = subjects.length;
+  const completedChapters = chapters.filter(
+    (chapter) => chapter.isCompleted
+  ).length;
+  const unCompletedChapters = chapters.filter(
+    (chapter) => !chapter.isCompleted
+  ).length;
 
   const pathnames = location.pathname.split("/").filter((x) => x);
   const breadcrumbs = [
@@ -66,14 +102,32 @@ export function SubjectOverviewPage() {
   ];
 
   const handleCreateSubject = () => {
-    console.log("Create Subject");
+    navigate("/subjects/create-subject");
   };
+
   const handleOpenSubjectMarketplace = () => {
     console.log("Open Subject Marketplace");
   };
+
   const handleSearch = (value: string) => {
     console.log("Search value:", value);
   };
+
+  // ✅ Show loading state until data is fetched
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          minHeight: "100dvh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography>Loading...</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -86,7 +140,7 @@ export function SubjectOverviewPage() {
         gap: 2,
       }}
     >
-      {/* Page header */}
+      {/* ✅ Page Header */}
       <Paper
         variant="elevation"
         sx={{
@@ -99,6 +153,8 @@ export function SubjectOverviewPage() {
         <Breadcrumbs>{breadcrumbs}</Breadcrumbs>
         <Typography variant="h4">Subjects - Overview</Typography>
       </Paper>
+
+      {/* ✅ Stats Section */}
       <Grid2
         container
         spacing={2}
@@ -118,33 +174,38 @@ export function SubjectOverviewPage() {
         <Grid2 size={{ xs: 4, sm: 2, md: 3, lg: 4, xl: 5 }}>
           <SingleElement
             icon={<GradingRounded />}
-            title="Learned Subjects"
-            value={numberOfSubjects}
+            title="Learned Chapters"
+            value={completedChapters}
             textColor="success"
           />
         </Grid2>
         <Grid2 size={{ xs: 4, sm: 2, md: 3, lg: 4, xl: 5 }}>
           <SingleElement
             icon={<GridOffRounded />}
-            title="Unlearned Subjects"
-            value={numberOfSubjects}
+            title="Unlearned Chapters"
+            value={unCompletedChapters}
             textColor="warning"
           />
         </Grid2>
+
+        {/* ✅ Search */}
         <Grid2 size={{ xs: 4, sm: 3, md: 3, lg: 6, xl: 6 }}>
-          <SearchElement onSearch={handleSearch} placeholder="Search Subjects..."/>
+          <SearchElement
+            onSearch={handleSearch}
+            placeholder="Search Subjects..."
+          />
         </Grid2>
+
+        {/* ✅ Action Buttons */}
         <Grid2 size={{ xs: 4, sm: 3, md: 6, lg: 6, xl: 9 }}>
           <ActionElement
             icon={<BookRounded sx={{ color: "#c28cf3", fontSize: 24 }} />}
             title="Manage Subjects"
-            // Button 1
             button1Text="Create Subject"
             button1Icon={<AddRounded />}
             onButton1Click={handleCreateSubject}
             button1Variant="contained"
             button1Color="success"
-            // Button 2
             button2Text="Subject Marketplace"
             button2Icon={<StorefrontRounded />}
             onButton2Click={handleOpenSubjectMarketplace}
@@ -152,8 +213,10 @@ export function SubjectOverviewPage() {
             button2Color="secondary"
           />
         </Grid2>
-        <Grid2 size={15} sx = {{}}>
-            <SubjectsGrid />
+
+        {/* ✅ Subjects Grid */}
+        <Grid2 size={15}>
+          <SubjectsGrid />
         </Grid2>
       </Grid2>
     </Box>
