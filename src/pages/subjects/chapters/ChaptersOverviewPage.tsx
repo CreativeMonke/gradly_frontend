@@ -229,6 +229,7 @@ export function ChaptersOverviewPage() {
             >
               <SearchElement
                 onSearch={setSearch}
+                enableMobileDrawer
                 placeholder="Search Chapter..."
               />
             </Box>

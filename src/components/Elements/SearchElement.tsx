@@ -15,11 +15,13 @@ import { Search as SearchIcon, Close as CloseIcon } from "@mui/icons-material";
 
 interface SearchElementProps {
   placeholder?: string;
+  enableMobileDrawer?: boolean;
   onSearch: (value: string) => void;
 }
 
 export const SearchElement = ({
   placeholder = "Search...",
+  enableMobileDrawer = false,
   onSearch,
 }: SearchElementProps) => {
   const [value, setValue] = useState("");
@@ -51,7 +53,7 @@ export const SearchElement = ({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  if (isMobile) {
+  if (isMobile && enableMobileDrawer) {
     // ✅ Mobile View (IconButton + Dialog)
     return (
       <>

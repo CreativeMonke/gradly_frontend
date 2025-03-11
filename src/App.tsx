@@ -48,9 +48,8 @@ const App = () => {
         <ToastContainer />
         <Grid2
           container
-          spacing={0}
-          gap={0}
-          columns={{ xs: 12, md: 12, lg: 16, xl: 20 }}
+          spacing={1}
+          columns={{ xs: 12, sm: 12, md: 12, lg: 16, xl: 20 }}
           sx={{ height: "100dvh" }}
         >
           {/* ✅ Only show header if authenticated */}
@@ -62,7 +61,7 @@ const App = () => {
 
           {/* ✅ Only show sidebar if authenticated */}
           {isAuthenticated && isDesktop && (
-            <Grid2 size={{ md: 3 }} maxWidth={300}>
+            <Grid2 size={{ sm : 3  }} maxWidth={300}>
               <Sidebar
                 mobileOpen={false}
                 onMobileClose={() => {}}
