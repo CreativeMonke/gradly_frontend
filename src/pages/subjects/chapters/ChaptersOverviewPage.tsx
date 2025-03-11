@@ -182,7 +182,7 @@ export function ChaptersOverviewPage() {
             <LinearProgress
               variant="determinate"
               value={progressPercentage}
-              sx={{ flexGrow: 1, height: 8, borderRadius: 4 }}
+              sx={{ flexGrow: 1, height: 8, borderRadius: 4, }}
             />
             <Typography variant="body2">{progressPercentage}%</Typography>
           </Paper>

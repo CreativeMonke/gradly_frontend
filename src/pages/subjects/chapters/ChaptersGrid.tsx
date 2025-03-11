@@ -138,7 +138,7 @@ export function ChaptersGrid() {
             fontWeight: "bold",
           }}
           color={
-            params.row.currentProgress > 0
+            params.row.currentProgress > 0 && params.row.currentProgress < 100
               ? `warning.main`
               : params.row.isCompleted
               ? `success.main`
