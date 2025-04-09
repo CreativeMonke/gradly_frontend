@@ -6,7 +6,6 @@ import {
   deleteChapter,
   deleteChapterFile,
 } from "../services/chaptersService";
-import { MaterialFile } from "../components/Elements/Utility/MaterialsSection";
 
 export interface Chapter {
   _id: string;
@@ -45,7 +44,7 @@ interface ChapterState {
     chapterId: string,
     chapterData: FormData,
     silentFunction?: boolean
-  ) => Promise<MaterialFile>;
+  ) => Promise<void>;
   deleteChapterFileFromStore: (
     chapterId: string,
     filePublicUrl: string
