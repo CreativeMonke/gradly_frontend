@@ -17,9 +17,9 @@ import {
   Typography,
 } from "@mui/material";
 import { useLocation, Link as RouterLink, useNavigate } from "react-router-dom";
-import { SingleElement } from "../../components/Elements/SingleElement";
-import { ActionElement } from "../../components/Elements/ActionElement";
-import { SearchElement } from "../../components/Elements/SearchElement";
+import { SingleElement } from "../../components/Elements/Normal Elements/SingleElement";
+import { ActionElement } from "../../components/Elements/Normal Elements/ActionElement";
+import { SearchElement } from "../../components/Elements/Normal Elements/SearchElement";
 import { SubjectsGrid } from "./SubjectsGrid";
 import { useSubjectsStore } from "../../store/subjectsStore";
 import { useChaptersStore } from "../../store/chaptersStore";

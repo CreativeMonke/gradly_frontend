@@ -62,8 +62,8 @@ export const SearchElement = ({
           <SearchIcon />
         </IconButton>
 
-        {/* Search Dialog */}
-        <Dialog open={open} onClose={handleClose} fullWidth>
+        {/* Search Dialog, opens at the top of the screen */}
+        <Dialog open={open} onClose={handleClose} fullWidth >
           <DialogTitle>Search</DialogTitle>
           <DialogContent>
             <Paper

@@ -32,9 +32,9 @@ import {
   deleteSubject,
 } from "../../services/subjectsService";
 //import { SearchElement } from "../../components/Elements/SearchElement";
-import { ActionElement } from "../../components/Elements/ActionElement";
+import { ActionElement } from "../../components/Elements/Normal Elements/ActionElement";
 import { deleteChapter, getChapters } from "../../services/chaptersService";
-import { ConfirmDialog } from "../../components/Elements/ConfirmDialog";
+import { ConfirmDialog } from "../../components/Elements/Normal Elements/ConfirmDialog";
 import { showErrorToast } from "../../utils/toast";
 
 const CATEGORIES = [

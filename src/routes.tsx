@@ -10,6 +10,8 @@ import { SubjectOverviewPage } from "./pages/subjects/SubjectOverviewPage";
 import CreateSubjectPage from "./pages/subjects/CreateSubjectPage";
 import SubjectPage from "./pages/subjects/SubjectEditPage";
 import { ChaptersOverviewPage } from "./pages/subjects/chapters/ChaptersOverviewPage";
+import CreateChapterPage from "./pages/subjects/chapters/CreateChapterPage";
+import ChapterPage from "./pages/subjects/chapters/ChapterPage";
 
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
@@ -110,10 +112,30 @@ const AppRoutes = () => {
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route
-            path="/subjects/:subjectId/:chapterId"
+            path="/subjects/:subjectId/chapters"
             element={
               <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
                 <ChaptersOverviewPage />
+              </motion.div>
+            }
+          />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/subjects/:subjectId/chapters/:chapterId"
+            element={
+              <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                <ChapterPage />
+              </motion.div>
+            }
+          />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/subjects/:subjectId/create-chapter"
+            element={
+              <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                <CreateChapterPage />
               </motion.div>
             }
           />

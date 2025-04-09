@@ -17,14 +17,14 @@ import {
   Typography,
 } from "@mui/material";
 import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
-import { SingleElement } from "../../../components/Elements/SingleElement";
-import { SearchElement } from "../../../components/Elements/SearchElement";
+import { SingleElement } from "../../../components/Elements/Normal Elements/SingleElement";
+import { SearchElement } from "../../../components/Elements/Normal Elements/SearchElement";
 import { ChaptersGrid } from "./ChaptersGrid";
 import { Subject, useSubjectsStore } from "../../../store/subjectsStore";
 import { useChaptersStore } from "../../../store/chaptersStore";
 import { useEffect, useState } from "react";
 import { getSubject } from "../../../services/subjectsService";
-import { MinimalDropdownActionElement } from "../../../components/Elements/MinimalDropdownActionElement";
+import { MinimalDropdownActionElement } from "../../../components/Elements/Minimal Elements/MinimalDropdownActionElement";
 import { MinimalActionElement } from "../../../components/Elements/Minimal Elements/MinimalActionElement";
 
 const sortOptions = [
